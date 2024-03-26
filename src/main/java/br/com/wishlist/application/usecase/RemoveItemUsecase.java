@@ -6,6 +6,7 @@ import br.com.wishlist.domain.repository.WishlistRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -23,6 +24,7 @@ public class RemoveItemUsecase {
                 .orElseThrow(() -> new IllegalArgumentException("Item não encontrado na Wishlist."));
 
         wishlist.getItemList().remove(item);
+        wishlist.setCreationDate(LocalDateTime.now());
 
         return wishlistRepository.save(wishlist);
     }

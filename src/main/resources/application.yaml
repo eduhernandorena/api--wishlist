@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: api--wishlist
+
+wishlist:
+  limit-size: 20
