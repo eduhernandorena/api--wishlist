@@ -1,15 +1,22 @@
 package br.com.wishlist.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
 @Setter
 @ToString
-public class Item {
+@AllArgsConstructor
+public class Item implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String productDescription;
     private UUID productId;
 }

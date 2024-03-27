@@ -7,6 +7,5 @@ import java.util.UUID;
 
 public interface WishlistRepository {
     Optional<Wishlist> findByClientId(UUID clientId);
-    Wishlist save(Wishlist wishlist);
-    void deleteById(UUID id);
+    void deleteByClientId(UUID clientId);
 }

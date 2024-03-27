@@ -1,11 +1,15 @@
-package br.com.wishlist.application.controller.dto;
+package br.com.wishlist.infrasctructure.web.controller.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class WishlistRequest {
     private UUID clientId;
     private Set<ItemRequest> itemList;

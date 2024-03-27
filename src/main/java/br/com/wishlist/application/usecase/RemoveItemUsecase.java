@@ -1,21 +1,22 @@
 package br.com.wishlist.application.usecase;
 
+import br.com.wishlist.application.service.WishlistService;
 import br.com.wishlist.domain.model.Item;
 import br.com.wishlist.domain.model.Wishlist;
-import br.com.wishlist.domain.repository.WishlistRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RemoveItemUsecase {
-    private final WishlistRepository wishlistRepository;
+
+    private final WishlistService wishlistService;
 
     public Wishlist removeItem(UUID clientId, UUID productId) {
-        Wishlist wishlist = wishlistRepository.findByClientId(clientId)
+        Wishlist wishlist = wishlistService.findByClientId(clientId)
                 .orElseThrow(() -> new IllegalArgumentException("Wishlist não encontrada."));
 
         Item item = wishlist.getItemList().stream()
@@ -26,6 +27,6 @@ public class RemoveItemUsecase {
         wishlist.getItemList().remove(item);
         wishlist.setCreationDate(LocalDateTime.now());
 
-        return wishlistRepository.save(wishlist);
+        return wishlistService.save(wishlist);
     }
 }

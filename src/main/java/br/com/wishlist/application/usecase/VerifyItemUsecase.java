@@ -1,19 +1,20 @@
 package br.com.wishlist.application.usecase;
 
+import br.com.wishlist.application.service.WishlistService;
 import br.com.wishlist.domain.model.Wishlist;
-import br.com.wishlist.domain.repository.WishlistRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VerifyItemUsecase {
-    private final WishlistRepository wishlistRepository;
+    
+    private final WishlistService wishlistService;
 
     public boolean verifyItemInWishlist(UUID clientId, UUID productId) {
-        Wishlist wishlist = wishlistRepository.findByClientId(clientId)
+        Wishlist wishlist = wishlistService.findByClientId(clientId)
                 .orElseThrow(() -> new IllegalArgumentException("Wishlist não encontrada."));
 
         return wishlist.getItemList().stream()

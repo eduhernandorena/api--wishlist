@@ -1,7 +1,7 @@
-package br.com.wishlist.application.controller;
+package br.com.wishlist.infrasctructure.web.controller;
 
-import br.com.wishlist.application.controller.dto.ItemRequest;
-import br.com.wishlist.application.controller.dto.WishlistRequest;
+import br.com.wishlist.infrasctructure.web.controller.dto.ItemRequest;
+import br.com.wishlist.infrasctructure.web.controller.dto.WishlistRequest;
 import br.com.wishlist.application.usecase.*;
 import br.com.wishlist.domain.model.Wishlist;
 import lombok.AllArgsConstructor;
@@ -23,34 +23,34 @@ public class WishlistController {
     private final VerifyItemUsecase verifyItemUsecase;
 
     @PostMapping("/create")
-    public ResponseEntity<Wishlist> createWishlist(@RequestParam WishlistRequest request) {
+    public ResponseEntity<Wishlist> createWishlist(@RequestBody WishlistRequest request) {
         var wishlist = createWishlistUsecase.createWishlist(request);
 
         return new ResponseEntity<>(wishlist, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteWishlist(@RequestParam UUID clientId) {
+    @DeleteMapping("/delete/{clientId}")
+    public ResponseEntity<Void> deleteWishlist(@PathVariable UUID clientId) {
         deleteWishlistUsecase.deleteWishlist(clientId);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/insertItem")
-    public ResponseEntity<Wishlist> insertItem(@RequestParam UUID clientId, @RequestParam ItemRequest item) {
+    @PostMapping("/insertItem/{clientId}")
+    public ResponseEntity<Wishlist> insertItem(@PathVariable UUID clientId, @RequestBody ItemRequest item) {
         var wishlist = insertItemUsecase.addItem(clientId, item);
 
         return new ResponseEntity<>(wishlist, HttpStatus.OK);
     }
 
-    @DeleteMapping("/removeItem")
-    public ResponseEntity<Wishlist> removeItem(@RequestParam UUID clientId, @RequestParam UUID productId) {
+    @DeleteMapping("/removeItem/{clientId}/{productId}")
+    public ResponseEntity<Wishlist> removeItem(@PathVariable UUID clientId, @PathVariable UUID productId) {
         var wishlist = removeItemUsecase.removeItem(clientId, productId);
 
         return new ResponseEntity<>(wishlist, HttpStatus.OK);
     }
 
-    @GetMapping("/verifyItem")
-    public ResponseEntity<Boolean> verifyItem(@RequestParam UUID clientId, @RequestParam UUID productId) {
+    @GetMapping("/verifyItem/{clientId}/{productId}")
+    public ResponseEntity<Boolean> verifyItem(@PathVariable UUID clientId, @PathVariable UUID productId) {
         boolean itemExists = verifyItemUsecase.verifyItemInWishlist(clientId, productId);
         return ResponseEntity.ok(itemExists);
     }

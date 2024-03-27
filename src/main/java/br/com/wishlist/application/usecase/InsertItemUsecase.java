@@ -1,11 +1,10 @@
 package br.com.wishlist.application.usecase;
 
-import br.com.wishlist.application.controller.dto.ItemRequest;
+import br.com.wishlist.application.service.WishlistService;
 import br.com.wishlist.domain.model.Wishlist;
-import br.com.wishlist.domain.repository.WishlistRepository;
+import br.com.wishlist.infrasctructure.config.properties.WishlistProperties;
+import br.com.wishlist.infrasctructure.web.controller.dto.ItemRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,25 +16,25 @@ import static br.com.wishlist.application.mapper.WishlistMapper.MAPPER;
 @RequiredArgsConstructor
 public class InsertItemUsecase {
 
-    @Value("${wishlist.limit-size:20}")
-    private Integer limitSize;
-
-    private final WishlistRepository wishlistRepository;
+    private final WishlistService wishlistService;
+    private final WishlistProperties wishlistProperties;
 
     public Wishlist addItem(final UUID clientId,
                             final ItemRequest itemRequest) {
-        var wishlist = wishlistRepository.findByClientId(clientId)
+        var wishlist = wishlistService.findByClientId(clientId)
                 .orElseThrow(() -> new IllegalArgumentException("Lista de desejos não encontrada para o usuario."));
 
-        val itemListSize = wishlist.getItemList().size();
+        var itemListSize = wishlist.getItemList().size();
 
-        if(itemListSize >= limitSize) throw new IllegalArgumentException("Limite da lista de desejos alcancado.");
+        if (itemListSize >= wishlistProperties.getLimitSize()) {
+            throw new IllegalArgumentException("Limite da lista de desejos alcancado.");
+        }
 
         var item = MAPPER.toDomain(itemRequest);
         wishlist.getItemList().add(item);
         wishlist.setCreationDate(LocalDateTime.now());
 
-        return wishlistRepository.save(wishlist);
+        return wishlistService.save(wishlist);
     }
 
 }
