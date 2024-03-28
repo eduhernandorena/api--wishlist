@@ -60,7 +60,7 @@ public class WishlistController {
             @ApiResponse(code = 500, message = "Erro interno no servidor")
     })
     @ApiOperation("Adiciona um produto na lista de desejos do cliente")
-    @PostMapping("/insertItem/{clientId}")
+    @PutMapping("/insertItem/{clientId}")
     public ResponseEntity<Wishlist> insertItem(@PathVariable @Valid @NotNull(message = "O id do cliente deve estar preenchido") UUID clientId,
                                                @RequestBody @Valid ItemRequest item) {
         var wishlist = insertItemUsecase.addItem(clientId, item);
@@ -74,7 +74,7 @@ public class WishlistController {
             @ApiResponse(code = 500, message = "Erro interno no servidor")
     })
     @ApiOperation("Remove um produto na lista de desejos do cliente")
-    @DeleteMapping("/removeItem/{clientId}/{productId}")
+    @PutMapping("/removeItem/{clientId}/{productId}")
     public ResponseEntity<Wishlist> removeItem(@PathVariable @Valid @NotNull(message = "O id do cliente deve estar preenchido") UUID clientId,
                                                @PathVariable @Valid @NotNull(message = "O id do produto deve estar preenchido") UUID productId) {
         var wishlist = removeItemUsecase.removeItem(clientId, productId);

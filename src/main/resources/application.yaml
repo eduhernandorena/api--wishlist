@@ -10,6 +10,9 @@ spring:
       port: 6379
       database: 0
       password: 1235
+logging:
+  level:
+    org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: ERROR
 
 wishlist:
   limit-size: 20
