@@ -17,29 +17,20 @@ public class WishlistService {
 
     private final MongoWishlistRepository wishlistRepository;
 
-    @Cacheable(value = "wishlist", key = "#clientId")
+    @Cacheable(value = "wishlist", key = "#clientId", unless = "#result == null")
     public Optional<Wishlist> findByClientId(final UUID clientId){
-        if (clientId == null) {
-            throw new IllegalArgumentException("clientId não pode ser nulo.");
-        }
         return wishlistRepository.findByClientId(clientId);
     }
 
     @CachePut(value = "wishlist", key = "#wishlist.clientId")
     @Transactional
     public Wishlist save(final Wishlist wishlist){
-        if (wishlist == null || wishlist.getClientId() == null) {
-            throw new IllegalArgumentException("Wishlist ou clientId não podem ser nulos.");
-        }
         return wishlistRepository.save(wishlist);
     }
 
     @CacheEvict(value = "wishlist", key = "#clientId")
     @Transactional
     public void deleteByClientId(final UUID clientId){
-        if (clientId == null) {
-            throw new IllegalArgumentException("clientId não pode ser nulo.");
-        }
         wishlistRepository.deleteByClientId(clientId);
     }
 }
