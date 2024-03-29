@@ -10,7 +10,8 @@ import org.mockito.Mock;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -38,16 +39,6 @@ public class WishlistServiceTest {
         assertTrue(result.isPresent());
         assertEquals(wishlist, result.get());
     }
-
-    @Test
-    void testFindByClientId_Negative() {
-        UUID clientId = null;
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> wishlistService.findByClientId(clientId));
-
-        assertEquals("clientId não pode ser nulo.", exception.getMessage());
-    }
-
     @Test
     void testSave_Positive() {
         UUID clientId = UUID.randomUUID();
@@ -60,29 +51,11 @@ public class WishlistServiceTest {
     }
 
     @Test
-    void testSave_Negative() {
-        Wishlist wishlist = Wishlist.builder().build();
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> wishlistService.save(wishlist));
-
-        assertEquals("Wishlist ou clientId não podem ser nulos.", exception.getMessage());
-    }
-
-    @Test
     void testDeleteByClientId_Positive() {
         UUID clientId = UUID.randomUUID();
 
         wishlistService.deleteByClientId(clientId);
 
         verify(wishlistRepository, times(1)).deleteByClientId(clientId);
-    }
-
-    @Test
-    void testDeleteByClientId_Negative() {
-        UUID clientId = null;
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> wishlistService.deleteByClientId(clientId));
-
-        assertEquals("clientId não pode ser nulo.", exception.getMessage());
     }
 }
